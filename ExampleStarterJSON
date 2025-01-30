@@ -1,0 +1,102 @@
+Drop this into MONGO DB and play with it: 
+
+{
+  "products": [
+    {
+      "_id": { "$oid": "507f1f77bcf86cd799439011" },
+      "name": "Organic Bananas",
+      "category": "Produce",
+      "subcategory": "Fruits",
+      "price": 2.99,
+      "unit": "lb",
+      "inventory": {
+        "quantity": 150,
+        "min_stock": 50,
+        "max_stock": 300,
+        "location": "A1-S3"
+      },
+      "supplier": {
+        "name": "Fresh Fields Farms",
+        "supplier_id": "FF001",
+        "contact": "+1-555-0123"
+      },
+      "nutrition": {
+        "serving_size": "100g",
+        "calories": 89,
+        "protein": 1.1,
+        "carbohydrates": 22.8,
+        "fat": 0.3
+      },
+      "metadata": {
+        "organic": true,
+        "allergens": [],
+        "shelf_life_days": 7,
+        "storage_temp": 15
+      }
+    },
+    {
+      "_id": { "$oid": "507f1f77bcf86cd799439012" },
+      "name": "Whole Milk",
+      "category": "Dairy",
+      "subcategory": "Milk",
+      "price": 3.49,
+      "unit": "gallon",
+      "inventory": {
+        "quantity": 75,
+        "min_stock": 30,
+        "max_stock": 120,
+        "location": "D3-S1"
+      },
+      "supplier": {
+        "name": "Valley Dairy Co-op",
+        "supplier_id": "VD002",
+        "contact": "+1-555-0124"
+      },
+      "nutrition": {
+        "serving_size": "240ml",
+        "calories": 150,
+        "protein": 8,
+        "carbohydrates": 12,
+        "fat": 8
+      },
+      "metadata": {
+        "organic": false,
+        "allergens": ["milk"],
+        "shelf_life_days": 14,
+        "storage_temp": 4
+      }
+    },
+    {
+      "_id": { "$oid": "507f1f77bcf86cd799439013" },
+      "name": "Whole Grain Bread",
+      "category": "Bakery",
+      "subcategory": "Bread",
+      "price": 4.29,
+      "unit": "loaf",
+      "inventory": {
+        "quantity": 45,
+        "min_stock": 20,
+        "max_stock": 80,
+        "location": "B2-S4"
+      },
+      "supplier": {
+        "name": "Artisan Bakeworks",
+        "supplier_id": "AB003",
+        "contact": "+1-555-0125"
+      },
+      "nutrition": {
+        "serving_size": "30g",
+        "calories": 80,
+        "protein": 4,
+        "carbohydrates": 15,
+        "fat": 1
+      },
+      "metadata": {
+        "organic": false,
+        "allergens": ["wheat", "soy"],
+        "shelf_life_days": 5,
+        "storage_temp": 20
+      }
+    }
+  ]
+}

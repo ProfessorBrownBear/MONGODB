@@ -1,0 +1,16 @@
+// RUN this code in Visual Studio Code
+// remember to npm install mongoose   !!
+// This will verify that you are now able to programmatically connect to your MONGO database in program space
+// Pro Tip:  Top programmers understand that you should push as much of the processing algorithms as possible into your data contain and let it do the heavy lifting.
+// hack around with this until you see the happy message: cluster0 connected successfully
+
+// Import mongoose
+const mongoose = require('mongoose');
+
+// MongoDB connection string
+const connectionString = 'mongodb+srv://mongodbuser:password@cluster0.nyo4i.mongodb.net/';
+
+// Connect to MongoDB
+mongoose.connect(connectionString)
+  .then(() => console.log('cluster0 connected successfully'))
+  .catch(err => console.log(err));

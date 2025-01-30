@@ -1,0 +1,147 @@
+// 1. CREATE - create.js
+const mongoose = require('mongoose');
+
+const connectionString = 'mongodb+srv://mongodbuser:MikeWarring@cluster0.nyo4i.mongodb.net/grocery_store';
+
+// Simple schema
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  category: String
+});
+
+const Product = mongoose.model('Product', productSchema);
+
+// Connect and create multiple products
+async function createProducts() {
+  try {
+    await mongoose.connect(connectionString);
+    console.log('Connected to MongoDB');
+
+    // Create array of products
+    const productsToCreate = [
+      { name: "Apples", price: 1.99, category: "Produce" },
+      { name: "Bread", price: 2.49, category: "Bakery" },
+      { name: "Milk", price: 3.99, category: "Dairy" }
+    ];
+
+    // Insert multiple products
+    const result = await Product.insertMany(productsToCreate);
+    console.log('Products created successfully:', result);
+
+  } catch (err) {
+    console.log('Error:', err);
+  } finally {
+    mongoose.connection.close();
+  }
+}
+
+createProducts();
+
+// 2. READ - read.js
+const mongoose = require('mongoose');
+
+const connectionString = 'mongodb+srv://mongodbuser:MikeWarring@cluster0.nyo4i.mongodb.net/grocery_store';
+
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  category: String
+});
+
+const Product = mongoose.model('Product', productSchema);
+
+async function readProducts() {
+  try {
+    await mongoose.connect(connectionString);
+    console.log('Connected to MongoDB');
+
+    // Find all products
+    const products = await Product.find({});
+    console.log('All products:', products);
+
+    // Find specific category
+    const produceItems = await Product.find({ category: 'Produce' });
+    console.log('Produce items:', produceItems);
+
+  } catch (err) {
+    console.log('Error:', err);
+  } finally {
+    mongoose.connection.close();
+  }
+}
+
+readProducts();
+
+// 3. UPDATE - update.js
+const mongoose = require('mongoose');
+
+const connectionString = 'mongodb+srv://mongodbuser:MikeWarring@cluster0.nyo4i.mongodb.net/grocery_store';
+
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  category: String
+});
+
+const Product = mongoose.model('Product', productSchema);
+
+async function updateProducts() {
+  try {
+    await mongoose.connect(connectionString);
+    console.log('Connected to MongoDB');
+
+    // Update price of Apples
+    const updateResult = await Product.updateOne(
+      { name: "Apples" },
+      { $set: { price: 2.29 } }
+    );
+    console.log('Update result:', updateResult);
+
+    // Show updated product
+    const updatedProduct = await Product.findOne({ name: "Apples" });
+    console.log('Updated product:', updatedProduct);
+
+  } catch (err) {
+    console.log('Error:', err);
+  } finally {
+    mongoose.connection.close();
+  }
+}
+
+updateProducts();
+
+// 4. DELETE - delete.js
+const mongoose = require('mongoose');
+
+const connectionString = 'mongodb+srv://mongodbuser:MikeWarring@cluster0.nyo4i.mongodb.net/grocery_store';
+
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  category: String
+});
+
+const Product = mongoose.model('Product', productSchema);
+
+async function deleteAndShowProducts() {
+  try {
+    await mongoose.connect(connectionString);
+    console.log('Connected to MongoDB');
+
+    // Delete Bread
+    const deleteResult = await Product.deleteOne({ name: "Bread" });
+    console.log('Delete result:', deleteResult);
+
+    // Show remaining products
+    const remainingProducts = await Product.find({});
+    console.log('Remaining products:', remainingProducts);
+
+  } catch (err) {
+    console.log('Error:', err);
+  } finally {
+    mongoose.connection.close();
+  }
+}
+
+deleteAndShowProducts();

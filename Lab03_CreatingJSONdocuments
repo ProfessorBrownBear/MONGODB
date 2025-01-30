@@ -1,0 +1,40 @@
+// Import mongoose
+const mongoose = require('mongoose');
+
+// MongoDB connection string
+const connectionString = 'mongodb+srv://mongodbuser:password@cluster0.nyo4i.mongodb.net/grocery_store';
+
+// Define a simple schema
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  category: String
+});
+
+// Create model
+const Product = mongoose.model('Product', productSchema);
+
+// Connect and insert a product
+mongoose.connect(connectionString)
+  .then(async () => {
+    console.log('Connected successfully to MongoDB');
+    
+    // Create a single product
+    const newProduct = new Product({
+      name: "Bananas",
+      price: 2.99,
+      category: "Produce"
+    });
+
+    // Save to database
+    try {
+      const savedProduct = await newProduct.save();
+      console.log('Product saved successfully:', savedProduct);
+    } catch (err) {
+      console.log('Error saving product:', err);
+    }
+
+    // Close the connection
+    mongoose.connection.close();
+  })
+  .catch(err => console.log('MongoDB connection error:', err));

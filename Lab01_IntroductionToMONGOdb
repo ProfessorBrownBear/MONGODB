@@ -4,9 +4,9 @@ Lab Workbook:  https://coda.io/@peter-sigurdson/mongodb-application-development
 
 Topics Whiteboard:  https://lucid.app/lucidchart/83393b50-704b-40e0-9fe3-019063387fef/edit?viewport_loc=-117%2C-63%2C3456%2C1681%2C0_0&invitationId=inv_db4b4ce5-fe67-4fef-8500-8fb2590481c6
 
-Our lesson plan for Session 1 on Mongo DB is:
+Our lesson plan for Mongo DB is:
 
-Understanding the theory of JSON as a Data Modelling Tool
+Understanding the theory of JSON as a Data Modelling Tool. Relating JSON to SQL:   https://docs.google.com/presentation/d/1Kym_v5X6ZALAZ47xcu3aXIXvGoWvZyfP/edit#slide=id.p1
 
 Understanding how to use the MONGODB Atlas Cloud Service to create and work with Databases and Obtain Connection Strings
 
@@ -15,3 +15,11 @@ Using MongoDB Compass to poke around in your database.  This is a tool you must 
 Using MongoDB Compasss to create JSON Documents by hand.  (Later we will do this with Mongoose Code)
 
 Studying the operation of the MONGOOSE Library and Understanding how it is an ODM Object to Code Mapper.
+
+Writing progressively more evolved NODE NPMjs.com Programs to perform CRUD Operations on MONGODB Collections. 
+
+Connecting our MONGOOSE code to the Express.js Web Server to construct a Model View Controller Website with MONGO as the Back End data store.
+
+Creating JSON databases in MONGODB which join multiple Collections.  (Equivalent to Predicate JOINS in SQL)
+
+Using the $lookup operator to create aggregation pipelines to process JSON encoded data. (The equivalent to aggregation formulas in SQL).

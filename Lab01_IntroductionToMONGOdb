@@ -3,3 +3,15 @@ Start by watching this Video:  https://youtu.be/Vwg8vYHWqsM
 Lab Workbook:  https://coda.io/@peter-sigurdson/mongodb-application-development
 
 Topics Whiteboard:  https://lucid.app/lucidchart/83393b50-704b-40e0-9fe3-019063387fef/edit?viewport_loc=-117%2C-63%2C3456%2C1681%2C0_0&invitationId=inv_db4b4ce5-fe67-4fef-8500-8fb2590481c6
+
+Our lesson plan for Session 1 on Mongo DB is:
+
+Understanding the theory of JSON as a Data Modelling Tool
+
+Understanding how to use the MONGODB Atlas Cloud Service to create and work with Databases and Obtain Connection Strings
+
+Using MongoDB Compass to poke around in your database.  This is a tool you must download and install locally.  https://coda.io/@peter-sigurdson/what-is-mongodb-compass  
+
+Using MongoDB Compasss to create JSON Documents by hand.  (Later we will do this with Mongoose Code)
+
+Studying the operation of the MONGOOSE Library and Understanding how it is an ODM Object to Code Mapper.

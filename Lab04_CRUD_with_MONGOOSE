@@ -129,13 +129,20 @@ async function deleteAndShowProducts() {
     await mongoose.connect(connectionString);
     console.log('Connected to MongoDB');
 
+    // Show initial products
+    console.log('\nInitial products in database:');
+    const initialProducts = await Product.find({});
+    console.log(initialProducts);
+
     // Delete Bread
+    console.log('\nDeleting "Bread"...');
     const deleteResult = await Product.deleteOne({ name: "Bread" });
     console.log('Delete result:', deleteResult);
 
     // Show remaining products
+    console.log('\nRemaining products in database:');
     const remainingProducts = await Product.find({});
-    console.log('Remaining products:', remainingProducts);
+    console.log(remainingProducts);
 
   } catch (err) {
     console.log('Error:', err);

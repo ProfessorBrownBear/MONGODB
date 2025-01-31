@@ -6,35 +6,64 @@ const connectionString = 'mongodb+srv://mongodbuser:password@cluster0.nyo4i.mong
 
 // Define a simple schema
 const productSchema = new mongoose.Schema({
-  name: String,
-  price: Number,
-  category: String
+    name: String,
+    price: Number,
+    category: String
 });
 
 // Create model
 const Product = mongoose.model('Product', productSchema);
 
-// Connect and insert a product
-mongoose.connect(connectionString)
-  .then(async () => {
-    console.log('Connected successfully to MongoDB');
+// Function to display all products
+async function displayAllProducts(message) {
+    console.log('\n' + '='.repeat(50));
+    console.log(message);
+    console.log('='.repeat(50));
     
-    // Create a single product
-    const newProduct = new Product({
-      name: "Bananas",
-      price: 2.99,
-      category: "Produce"
-    });
-
-    // Save to database
-    try {
-      const savedProduct = await newProduct.save();
-      console.log('Product saved successfully:', savedProduct);
-    } catch (err) {
-      console.log('Error saving product:', err);
+    const products = await Product.find({});
+    
+    if (products.length === 0) {
+        console.log('No products found in database');
+    } else {
+        products.forEach(product => {
+            console.log(`Name: ${product.name}`);
+            console.log(`Price: $${product.price}`);
+            console.log(`Category: ${product.category}`);
+            console.log('-'.repeat(30));
+        });
     }
+    console.log('='.repeat(50) + '\n');
+}
 
-    // Close the connection
-    mongoose.connection.close();
-  })
-  .catch(err => console.log('MongoDB connection error:', err));
+// Connect and perform operations
+mongoose.connect(connectionString)
+    .then(async () => {
+        console.log('Connected successfully to MongoDB');
+        
+        try {
+            // Display initial database contents
+            await displayAllProducts('CURRENT DATABASE CONTENTS:');
+            
+            // Create a single product
+            const newProduct = new Product({
+                name: "Bananas",
+                price: 2.99,
+                category: "Produce"
+            });
+            
+            // Save to database
+            const savedProduct = await newProduct.save();
+            console.log('Product saved successfully:', savedProduct);
+            
+            // Display updated database contents
+            await displayAllProducts('UPDATED DATABASE CONTENTS:');
+            
+        } catch (err) {
+            console.log('Error during operations:', err);
+        } finally {
+            // Close the connection
+            await mongoose.connection.close();
+            console.log('Database connection closed');
+        }
+    })
+    .catch(err => console.log('MongoDB connection error:', err));

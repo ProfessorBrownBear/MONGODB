@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // MongoDB connection string
-const connectionString = 'mongodb+srv://mongodbuser:password@cluster0.nyo4i.mongodb.net/grocery_store';
+const connectionString = 'mongodb+srv://mongodbuser:password@cluster0.nyo4i.mongodb.net/grocery_store_2';
 
 // Define a simple schema
 const productSchema = new mongoose.Schema({
@@ -67,3 +67,197 @@ mongoose.connect(connectionString)
         }
     })
     .catch(err => console.log('MongoDB connection error:', err));
+
+
+# MongoDB Filtering Lab Guide
+
+## Lab Objective
+Learn how to use MongoDB's find() method with different filters to query your grocery store database.
+
+## Initial Setup
+First, let's populate our database with more test data. Add this code after the initial connection but before displaying contents:
+
+```javascript
+// Add test data
+const testProducts = [
+    { name: "Apples", price: 1.99, category: "Produce" },
+    { name: "Bananas", price: 2.99, category: "Produce" },
+    { name: "Milk", price: 3.50, category: "Dairy" },
+    { name: "Cheese", price: 4.99, category: "Dairy" },
+    { name: "Bread", price: 2.49, category: "Bakery" },
+    { name: "Cookies", price: 3.99, category: "Bakery" },
+    { name: "Carrots", price: 1.50, category: "Produce" },
+    { name: "Yogurt", price: 0.99, category: "Dairy" }
+];
+
+await Product.insertMany(testProducts);
+```
+
+## Step 1: Basic Equality Filter
+Let's find all Produce items:
+
+```javascript
+const produceItems = await Product.find({ category: "Produce" });
+console.log("\nAll Produce Items:");
+console.log(produceItems);
+```
+
+**Exercise**: Modify the code to find all Dairy products.
+
+## Step 2: Price Comparison
+Find items priced less than $2.00:
+
+```javascript
+const affordableItems = await Product.find({ price: { $lt: 2.00 } });
+console.log("\nAffordable Items (under $2.00):");
+console.log(affordableItems);
+```
+
+**Exercise**: Find items priced between $2.00 and $4.00 using $gte and $lte.
+
+## Step 3: Multiple Conditions (AND)
+Find Produce items under $2.00:
+
+```javascript
+const affordableProduce = await Product.find({
+    category: "Produce",
+    price: { $lt: 2.00 }
+});
+console.log("\nAffordable Produce Items:");
+console.log(affordableProduce);
+```
+
+**Exercise**: Find Dairy products over $3.00.
+
+## Step 4: OR Conditions
+Find items that are either Produce or Bakery:
+
+```javascript
+const produceOrBakery = await Product.find({
+    $or: [
+        { category: "Produce" },
+        { category: "Bakery" }
+    ]
+});
+console.log("\nProduce or Bakery Items:");
+console.log(produceOrBakery);
+```
+
+**Exercise**: Find items that are either under $1.50 or over $4.00.
+
+## Step 5: Pattern Matching
+Find items containing "a" in their name:
+
+```javascript
+const itemsWithA = await Product.find({
+    name: { $regex: /a/i }  // 'i' makes it case-insensitive
+});
+console.log("\nItems with 'a' in name:");
+console.log(itemsWithA);
+```
+
+**Exercise**: Find items ending in "es".
+
+## Step 6: Field Selection
+Return only names and prices, excluding _id:
+
+```javascript
+const namesAndPrices = await Product.find({}, { 
+    name: 1, 
+    price: 1, 
+    _id: 0 
+});
+console.log("\nNames and Prices Only:");
+console.log(namesAndPrices);
+```
+
+**Exercise**: Return only categories and prices.
+
+## Step 7: Sorting Results
+Sort items by price in ascending order:
+
+```javascript
+const sortedByPrice = await Product.find({})
+    .sort({ price: 1 });  // 1 for ascending, -1 for descending
+console.log("\nItems Sorted by Price:");
+console.log(sortedByPrice);
+```
+
+**Exercise**: Sort items by name in alphabetical order.
+
+## Step 8: Limiting Results
+Find the 3 most expensive items:
+
+```javascript
+const expensiveItems = await Product.find({})
+    .sort({ price: -1 })
+    .limit(3);
+console.log("\nTop 3 Most Expensive Items:");
+console.log(expensiveItems);
+```
+
+**Exercise**: Find the 2 least expensive items in each category.
+
+## Step 9: Count Documents
+Count the number of items in each category:
+
+```javascript
+const produceCount = await Product.countDocuments({ category: "Produce" });
+const dairyCount = await Product.countDocuments({ category: "Dairy" });
+const bakeryCount = await Product.countDocuments({ category: "Bakery" });
+
+console.log("\nItem Counts by Category:");
+console.log(`Produce: ${produceCount}`);
+console.log(`Dairy: ${dairyCount}`);
+console.log(`Bakery: ${bakeryCount}`);
+```
+
+**Exercise**: Count items above and below $3.00.
+
+## Step 10: Advanced Query
+Find items that match several criteria:
+
+```javascript
+const complexQuery = await Product.find({
+    $and: [
+        { price: { $gte: 2.00, $lte: 4.00 } },
+        { category: { $in: ["Produce", "Dairy"] } },
+        { name: { $regex: /^[A-M]/i } }  // Starts with A through M
+    ]
+}).sort({ price: 1 });
+
+console.log("\nComplex Query Results:");
+console.log(complexQuery);
+```
+
+**Exercise**: Create your own complex query combining at least three different filtering techniques.
+
+## Final Challenge
+Create a function that takes category, minPrice, maxPrice, and namePattern as parameters and returns matching items:
+
+```javascript
+async function searchProducts(category, minPrice, maxPrice, namePattern) {
+    const query = {};
+    
+    if (category) query.category = category;
+    if (minPrice || maxPrice) {
+        query.price = {};
+        if (minPrice) query.price.$gte = minPrice;
+        if (maxPrice) query.price.$lte = maxPrice;
+    }
+    if (namePattern) query.name = { $regex: namePattern, $options: 'i' };
+    
+    return await Product.find(query).sort({ price: 1 });
+}
+```
+
+**Exercise**: Use this function to find:
+1. Dairy products between $2-$4 with 'e' in the name
+2. All products under $2 starting with 'B'
+3. Produce items over $1.50 ending in 's'
+
+## Submission Requirements
+1. Complete all exercises
+2. Create screenshots of your query results
+3. Write a brief explanation of which query operators you found most useful
+4. Create one additional complex query of your own design

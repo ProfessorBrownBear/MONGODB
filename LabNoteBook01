@@ -1,0 +1,215 @@
+# Lab Exercise: MongoDB Filtering in Healthy Shopper App
+
+## Objective
+Learn how to filter and query MongoDB data using Mongoose in your Healthy Shopper application.
+
+## Prerequisites
+- Completed Healthy Shopper base application
+- MongoDB Atlas connection working
+- Understanding of basic JavaScript
+
+## Part 1: Adding Test Data
+
+First, let's add several items to our database to work with. Use your existing form to add these items:
+
+1. Add these Produce items:
+   - Organic Apples (quantity: 6)
+   - Bananas (quantity: 8)
+   - Organic Carrots (quantity: 10)
+
+2. Add these Dairy items:
+   - Milk (quantity: 2)
+   - Organic Yogurt (quantity: 4)
+   - Cheese (quantity: 3)
+
+3. Add these Pantry items:
+   - Rice (quantity: 1)
+   - Pasta (quantity: 2)
+   - Organic Quinoa (quantity: 1)
+
+## Part 2: Adding Filter Routes
+
+Add these new routes to your `app.js` file, just before the server startup code:
+
+```javascript
+// GET route to fetch organic items
+app.get('/items/organic', async (req, res) => {
+    try {
+        const organicItems = await Item.find({
+            itemName: { $regex: /organic/i }  // Case-insensitive search
+        }).sort('-dateAdded');
+        res.json(organicItems);
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: 'Error fetching organic items'
+        });
+    }
+});
+
+// GET route to fetch items by category
+app.get('/items/category/:categoryName', async (req, res) => {
+    try {
+        const categoryItems = await Item.find({
+            category: req.params.categoryName
+        }).sort('-dateAdded');
+        res.json(categoryItems);
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: 'Error fetching category items'
+        });
+    }
+});
+
+// GET route to fetch items by minimum quantity
+app.get('/items/quantity/:minQuantity', async (req, res) => {
+    try {
+        const items = await Item.find({
+            quantity: { $gte: parseInt(req.params.minQuantity) }
+        }).sort('-dateAdded');
+        res.json(items);
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: 'Error fetching items by quantity'
+        });
+    }
+});
+```
+
+## Part 3: Adding Filter Buttons
+
+Add this HTML just above your existing items list in `index.html`:
+
+```html
+<!-- Filter Controls -->
+<div class="filter-controls" style="margin: 20px 0;">
+    <button onclick="loadAllItems()">Show All</button>
+    <button onclick="loadOrganicItems()">Show Organic</button>
+    <button onclick="loadCategoryItems('Produce')">Show Produce</button>
+    <button onclick="loadCategoryItems('Dairy')">Show Dairy</button>
+    <button onclick="loadCategoryItems('Pantry')">Show Pantry</button>
+    <button onclick="loadQuantityItems(5)">Quantity ≥ 5</button>
+</div>
+```
+
+Add these JavaScript functions in your `<script>` tag:
+
+```javascript
+// Function to load all items (existing function)
+async function loadAllItems() {
+    try {
+        const response = await fetch('/items');
+        const items = await response.json();
+        displayItems(items);
+    } catch (error) {
+        showError('Error loading items: ' + error.message);
+    }
+}
+
+// Function to load organic items
+async function loadOrganicItems() {
+    try {
+        const response = await fetch('/items/organic');
+        const items = await response.json();
+        displayItems(items);
+    } catch (error) {
+        showError('Error loading organic items: ' + error.message);
+    }
+}
+
+// Function to load items by category
+async function loadCategoryItems(category) {
+    try {
+        const response = await fetch(`/items/category/${category}`);
+        const items = await response.json();
+        displayItems(items);
+    } catch (error) {
+        showError('Error loading category items: ' + error.message);
+    }
+}
+
+// Function to load items by minimum quantity
+async function loadQuantityItems(minQuantity) {
+    try {
+        const response = await fetch(`/items/quantity/${minQuantity}`);
+        const items = await response.json();
+        displayItems(items);
+    } catch (error) {
+        showError('Error loading quantity items: ' + error.message);
+    }
+}
+
+// Function to display items (refactored from existing code)
+function displayItems(items) {
+    const itemsList = document.getElementById('itemsList');
+    itemsList.innerHTML = '<h2>Shopping List</h2>';
+
+    items.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'item';
+        itemDiv.innerHTML = `
+            <strong>${item.itemName}</strong><br>
+            Quantity: ${item.quantity}<br>
+            Category: ${item.category}<br>
+            Added: ${new Date(item.dateAdded).toLocaleDateString()}
+        `;
+        itemsList.appendChild(itemDiv);
+    });
+}
+```
+
+## Exercises
+
+1. **Basic Filtering**
+   - Add all the suggested items using your form
+   - Click each filter button and observe the results
+   - Explain what each filter does in your own words
+
+2. **Category Exploration**
+   - Add three more items in a new category
+   - Modify the code to add a new filter button for your category
+   - Test the new filter
+
+3. **Quantity Investigation**
+   - Change the quantity filter to show items with quantity ≥ 3
+   - Add a new filter for items with quantity ≤ 2
+   - What changes did you make to implement this?
+
+4. **Combined Filtering Challenge**
+   - Create a new route that finds organic items in a specific category
+   - Add a button "Organic Produce" that shows only organic produce items
+   - Hint: You'll need to use both `$regex` and category matching
+
+5. **Custom Filter Challenge**
+   - Add a text input field and button
+   - Create a route that searches item names for whatever text is input
+   - Add error handling for no matches found
+
+## Questions for Understanding
+
+1. What is the purpose of the `$regex` operator in the organic items query?
+2. Why do we use `parseInt()` in the quantity route?
+3. How does the `displayItems()` function improve our code organization?
+4. What would you add to make the filtering more useful for users?
+
+## Additional Challenges
+
+1. Add a "Clear Filters" button that resets to show all items
+2. Add a count of displayed items after filtering
+3. Add sorting options (by name, quantity, date)
+4. Allow multiple filters to be active at once
+5. Add a loading indicator while filters are being applied
+
+## Submission Requirements
+
+1. Screenshot of your working filters
+2. Your modified code files
+3. Answers to the Questions for Understanding
+4. Description of any additional features you added
+
+## Helpful Resources
+
+- [Mongoose Queries Guide](https://mongoosejs.com/docs/queries.html)
+- [MongoDB Query Operators](https://docs.mongodb.com/manual/reference/operator/query/)
